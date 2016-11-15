@@ -129,7 +129,7 @@ module.exports = function (context) {
                     if (!podfileSources.length) {
                         podfileSources.push("source 'https://github.com/CocoaPods/Specs.git'");
                     }
-                    podfileSources.push("source ''" + pod.source + "'");
+                    podfileSources.push("source '" + pod.source + "'");
                 }
                 if (pod.version) {
                     entry += ", '" + pod.version + "'";

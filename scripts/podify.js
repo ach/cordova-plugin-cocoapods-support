@@ -270,16 +270,20 @@ module.exports = function (context) {
             fs.writeFileSync('platforms/ios/cordova/lib/build.js', fixedBuildContent);
 
             if (!podified) {
-                console.log('Adding schemes');
-                fs.mkdirSync(sharedDataDir);
-                fs.mkdirSync(schemesTargetDir);
-                copyTpl(schemesSrcDir + '/CordovaLib.xcscheme', schemesTargetDir + '/CordovaLib.xcscheme', {
-                    appName: appName
-                });
-                copyTpl(schemesSrcDir + '/App.xcscheme', schemesTargetDir + '/' + appName + '.xcscheme', {
-                    appName: appName,
-                    appId: '1D6058900D05DD3D006BFB54'
-                });
+                try {
+                    fs.statSync(sharedDataDir);
+                } catch(e) {
+                    console.log('Adding schemes');
+                    fs.mkdirSync(sharedDataDir);
+                    fs.mkdirSync(schemesTargetDir);
+                    copyTpl(schemesSrcDir + '/CordovaLib.xcscheme', schemesTargetDir + '/CordovaLib.xcscheme', {
+                        appName: appName
+                    });
+                    copyTpl(schemesSrcDir + '/App.xcscheme', schemesTargetDir + '/' + appName + '.xcscheme', {
+                        appName: appName,
+                        appId: '1D6058900D05DD3D006BFB54'
+                    });
+                }
             }
         }
     }

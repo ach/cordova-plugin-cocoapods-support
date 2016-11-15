@@ -115,13 +115,21 @@ module.exports = function (context) {
             if (useFrameworks === 'true') {
                 podfileContents.push("use_frameworks!");
             }
-            podfileContents.push("target '" + appName + "' do");
+            var podfileTarget = [];
+            var podfileSources = [];
+            podfileTarget.push("target '" + appName + "' do");
 
             for (podId in newPods.pods) {
                 pod = newPods.pods[podId];
                 var entry = "\tpod '" + pod.id + "'";
                 if(pod['fix-bundle-path']) {
                     bundlePathsToFix.push(pod['fix-bundle-path']);
+                }
+                if (pod.source) {
+                    if (!podfileSources.length) {
+                        podfileSources.push("source 'https://github.com/CocoaPods/Specs.git'");
+                    }
+                    podfileSources.push("source ''" + pod.source + "'");
                 }
                 if (pod.version) {
                     entry += ", '" + pod.version + "'";
@@ -150,8 +158,10 @@ module.exports = function (context) {
                     });
                     entry += ", :subspecs => [" + configs.join() + "]";
                 }
-                podfileContents.push(entry);
+                podfileTarget.push(entry);
             }
+            podfileContents.push(podfileSources.join('\n'));
+            podfileContents.push(podfileTarget.join('\n'));
             podfileContents.push('end');
             fs.writeFileSync('platforms/ios/Podfile', podfileContents.join('\n'));
 

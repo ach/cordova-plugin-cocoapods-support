@@ -260,7 +260,7 @@ module.exports = function (context) {
             var xcodeprojRegex = /\.xcodeproj/g;
             var xcodeprojFix = '.xcworkspace';
             var destinationRegex = new RegExp("'-destination'\\s*,\\s*.*,", 'g');           
-            var destinationFix = "'-destination generic/platform=iOS',";
+            var destinationFix = "'-destination generic/platform=iOS,";
             var fixedBuildContent = buildContent
                 .replace(targetRegex, targetFix)
                 .replace(projectRegex, projectFix)
